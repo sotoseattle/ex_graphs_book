@@ -1,18 +1,10 @@
 defmodule GraphCommons do
-  @moduledoc """
-  Documentation for `GraphCommons`.
-  """
 
-  @doc """
-  Hello world.
+  @priv_dir "#{:code.priv_dir(:graph_commons)}"
 
-  ## Examples
+  def exports_dir(), do: @priv_dir <> "/transfer/exports"
+  def imports_dir(), do: @priv_dir <> "/transfer/imports"
+  def scripts_dir(), do: @priv_dir <> "/extras/scripts"
+  def storage_dir(), do: @priv_dir <> "/storage"
 
-      iex> GraphCommons.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
 end

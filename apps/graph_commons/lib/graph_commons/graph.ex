@@ -1,4 +1,6 @@
 defmodule GraphCommons.Graph do
+  @derive {Inspect, except: [:path, :uri]}
+
   defstruct ~w[data file type path uri]a
   @enforce_keys ~w[data file type]a
   @storage_dir ""
@@ -18,7 +20,6 @@ defmodule GraphCommons.Graph do
   @typedoc "Types for graph storage."
   @type base_type :: :dgraph | :native | :property | :rdf | :tinker
   @type graph_type :: base_type()
-  @type query_type :: base_type()
   @typedoc "Type for testing file types."
   @type file_test :: :dir? | :regular? | :exists?
 
@@ -40,6 +41,28 @@ defmodule GraphCommons.Graph do
     }
   end
 
+  defimpl Inspect, for: __MODULE__ do
+    @slice 16
+    @quote <<?">>
+
+    def inspect(%GraphCommons.Graph{} = graph, _opts) do
+      type = graph.type
+      file = @quote <> graph.file <> @quote
+      str  =
+        graph.data
+        |> String.replace("\n", "\\n")
+        |> String.replace(@quote, "\\" <> @quote)
+        |> String.slice(0, @slice)
+      data =
+        case String.length(str) < @slice do
+          true -> @quote <> str <> @quote
+          false -> @quote <> str <> "..." <> @quote
+        end
+
+      "#GraphCommons.Graph<type: #{type}, file: #{file}, data: #{data}>"
+    end
+
+  end
 
 
 end
